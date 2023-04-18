@@ -10,12 +10,14 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - name: Use repository
-        uses: actions/checkout@v3
-      - name: Build variables
+      - name: Set short git commit SHA
         id: vars
         run: |
-          echo "$GITHUB_SHA"
+          calculatedSha=$(git rev-parse --short ${{ github.sha }})
+          echo "::set-output name=short_sha::$calculatedSha"
+
+      - name: Confirm git commit SHA output
+        run: echo ${{ steps.vars.outputs.short_sha }}
 
   test:
     needs: 'setup'
@@ -43,11 +45,11 @@ jobs:
           java-version: 11
           distribution: 'zulu'
       - run: mvn --batch-mode --update-snapshots verify
-      - run: mkdir target && cp target/*.jar target
+      - run: mkdir staging && cp target/*.jar staging
       - uses: actions/upload-artifact@v3
         with:
           name: Package
-          path: target
+          path: staging
 
   docker:
     needs: [setup, test, build]
