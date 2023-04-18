@@ -33,10 +33,12 @@ jobs:
           distribution: 'zulu'
       - name: Build with Maven
         run: mvn -B package -DskipTests --file pom.xml
+      - name: upload jar
+        run : mkdir -p backend/target && cp target/*.jar backend/target/ && cp Dockerfile backend/
       - uses: actions/upload-artifact@v3
         with:
           name: artifact
-          path: ${{ github.workspace }}
+          path: backend #${{ github.workspace }}
           retention-days: 1
 
 #  docker:
