@@ -12,6 +12,6 @@ public class customerController {
 
     @GetMapping
     public String getCustomer(){
-        return "SpringBoot 2023";
+        return "SpringBoot 2023-04";
     }
 }
