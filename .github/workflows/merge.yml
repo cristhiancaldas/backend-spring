@@ -7,18 +7,8 @@ on:
 
 jobs:
 
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set short git commit SHA
-        id: vars
-        run:  echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-      - name: Confirm git commit SHA output
-        run: echo ${{ steps.vars.outputs.sha_short }}
-
   test:
-    needs: 'setup'
-    name: '🚀Test main'
+    name: '🚀Test'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -33,7 +23,7 @@ jobs:
 
   build:
     needs: 'test'
-    name: Build
+    name: '🚀 Build'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -41,31 +31,31 @@ jobs:
         with:
           java-version: 11
           distribution: 'zulu'
-      - run: mvn --batch-mode --update-snapshots verify
-      - run: mkdir staging && cp target/*.jar staging
+      - name: Build with Maven
+        run: mvn -B package -DskipTests --file pom.xml
       - uses: actions/upload-artifact@v3
         with:
-          name: Package
-          path: staging
+          name: artifact
+          path: target/customer-0.0.1-SNAPSHOT.jar
 
-  docker:
-    needs: [setup, test, build]
-    name: '🚀Docker Hub'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download repository
-        uses: actions/download-artifact@v2
-        with:
-          name: repository
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USER }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push image
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          file: Dockerfile
-          tags: ${{ github.repository }}:latest
-          build-args: VER=${{ needs.setup.outputs.ver }}
+#  docker:
+#    needs: [test, build]
+#    name: '🚀Docker Hub'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Download repository
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: artifact
+#      - name: Login to DockerHub
+#        uses: docker/login-action@v1
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USER }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#      - name: Build and push image
+#        uses: docker/build-push-action@v2
+#        with:
+#          push: true
+#          file: Dockerfile
+#          tags: ${{ github.repository }}:latest
+#          build-args: VER=${{ needs.setup.outputs.ver }}
