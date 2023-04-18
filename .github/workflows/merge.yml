@@ -17,8 +17,8 @@ jobs:
         run: |
           echo "$GITHUB_SHA"
 
-  test-main:
-    needs: 'build-dev'
+  test:
+    needs: 'setup'
     name: '🚀Test main'
     runs-on: ubuntu-latest
     steps:
@@ -33,7 +33,7 @@ jobs:
         run: mvn test --file pom.xml
 
   build:
-    needs: 'test-main'
+    needs: 'test'
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -50,7 +50,7 @@ jobs:
           path: target
 
   docker:
-    needs: [setup, build-dev, test-main]
+    needs: [setup, test, build]
     name: '🚀Docker Hub'
     runs-on: ubuntu-latest
     steps:
