@@ -36,7 +36,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: artifact
-          path: ${{ github.workspace }}/backend-spring/target/*.jar
+          path: ${{ github.workspace }}/target/*.jar
           retention-days: 1
 
 #  docker:
