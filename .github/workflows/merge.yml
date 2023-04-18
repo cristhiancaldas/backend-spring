@@ -37,25 +37,3 @@ jobs:
         with:
           name: artifact
           path: target/customer-0.0.1-SNAPSHOT.jar
-
-#  docker:
-#    needs: [test, build]
-#    name: '🚀Docker Hub'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Download repository
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: artifact
-#      - name: Login to DockerHub
-#        uses: docker/login-action@v1
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USER }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#      - name: Build and push image
-#        uses: docker/build-push-action@v2
-#        with:
-#          push: true
-#          file: Dockerfile
-#          tags: ${{ github.repository }}:latest
-#          build-args: VER=${{ needs.setup.outputs.ver }}
