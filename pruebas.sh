@@ -1,1 +1,0 @@
-mkdir -p prueba/target && cp target/*.jar prueba/target/ && cp  Dockerfile prueba/
