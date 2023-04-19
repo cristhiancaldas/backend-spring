@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: number version
-        run: echo "SHORT_SHA=$("${{ github.sha }}".SubString(0, 6))" >> $env:GITHUB_ENV
+        run: echo ${GITHUB_SHA::8}
       -
         name: Checkout
         uses: actions/checkout@v3
@@ -76,4 +76,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           file: Dockerfile
-          tags: ${{ secrets.DOCKERHUB_USER }}/backend:${{ env.SHORT_SHA }}
+          tags: ${{ secrets.DOCKERHUB_USER }}/backend:${GITHUB_SHA::8}
