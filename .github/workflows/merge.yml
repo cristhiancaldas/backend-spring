@@ -46,8 +46,10 @@ jobs:
     name: '🚀Docker Hub'
     runs-on: ubuntu-latest
     steps:
-      - name: Update deployment file
-        run: TAG=$(echo $GITHUB_SHA | head -c7)
+      - name: number version
+        run: echo "SHORT_SHA=${GITHUB_SHA::8}" >> $env:GITHUB_ENV
+  #    - name: Update deployment file
+ #       run: TAG=$(echo ${GITHUB_SHA::8})
       -
         name: Checkout
         uses: actions/checkout@v3
@@ -76,4 +78,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           file: Dockerfile
-          tags: ${{ secrets.DOCKERHUB_USER }}/backend:$TAG
+          tags: ${{ secrets.DOCKERHUB_USER }}/backend:$SHORT_SHA
