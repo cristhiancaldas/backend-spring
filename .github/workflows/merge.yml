@@ -46,8 +46,12 @@ jobs:
     name: '🚀Docker Hub'
     runs-on: ubuntu-latest
     steps:
-      - name: number version
-        run: echo "SHORT_SHA=${GITHUB_SHA::8}" >> $env:GITHUB_ENV
+      - id: sets-a-secret
+        name: Generate, mask, and output a secret
+        run: |
+            the_secret=$((RANDOM))
+            echo "secret-number=$the_secret" >> "$GITHUB_OUTPUT"
+ #       run: TAG=$(echo ${GITHUB_SHA::8}) >> $env:GITHUB_ENV
   #    - name: Update deployment file
  #       run: TAG=$(echo ${GITHUB_SHA::8})
       -
@@ -78,4 +82,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           file: Dockerfile
-          tags: ${{ secrets.DOCKERHUB_USER }}/backend:$SHORT_SHA
+          tags: ${{ secrets.DOCKERHUB_USER }}/backend:"${{ steps.sets-a-secret.outputs.secret-number }}"
