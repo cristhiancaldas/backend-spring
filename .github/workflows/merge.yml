@@ -82,4 +82,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           file: Dockerfile
-          tags: ${{ secrets.DOCKERHUB_USER }}/backend:"${{ steps.sets-a-secret.outputs.secret-number }}"
+          tags: ${{ secrets.DOCKERHUB_USER }}/backend:${{ steps.sets-a-secret.outputs.secret-number }}
